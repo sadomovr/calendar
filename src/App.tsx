@@ -1,10 +1,10 @@
-import './App.css'
+import { CalendarPage } from "./pages/calendar/calendar.tsx";
 
 function App() {
 
   return (
     <>
-			Hello world
+			<CalendarPage />
     </>
   )
 }
