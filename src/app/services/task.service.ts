@@ -61,12 +61,38 @@ class TaskService {
 	}
 
 	public deleteTask( task: Task ) {
-		const tasks = this.getTasksByDay( task.date ).filter(( item => item.id !== task.id ))
+		const tasks = this.getAllTasks()
+		const tasksByDate = this.getTasksByDay( task.date ).filter(( item => item.id !== task.id ))
+
+		tasks[ task.date.format(this.dateFormat)] = [ ...tasksByDate ]
 
 		localStorage.setItem(
-			task.date.format( this.dateFormat ),
+			'tasks',
 			JSON.stringify( tasks )
 		)
+	}
+
+	public moveTask( date: Dayjs, task: Task ) {
+		this.deleteTask( task )
+		this.saveTask( { ...task, date } )
+	}
+
+	public changeTaskPosition(task: Task, dragIndex: number, hoverIndex: number ) {
+		const tasks = this.getTasksByDay( task.date )
+
+		const dragItem = tasks[dragIndex];
+
+		if (dragItem) {
+			const coppiedArray = [ ...tasks ]
+
+			const prevItem = coppiedArray.splice(hoverIndex, 1, dragItem);
+			coppiedArray.splice(dragIndex, 1, prevItem[0]);
+
+			localStorage.setItem(
+				task.date.format( this.dateFormat ),
+				JSON.stringify( tasks )
+			)
+		}
 	}
 }
 

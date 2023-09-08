@@ -12,6 +12,8 @@ type DayContext = {
 	days: CalendarDay[]
 	handleAddOrEditTask: ( task: Task | NewTask ) => void
 	handleDeleteTask: ( task: Task ) => void
+	handleMoveTask: ( date: Dayjs, task: Task ) => void
+	handleChangeTaskPosition: ( task: Task, dragIndex: number, hoverIndex: number ) => void
 }
 
 const DaysContext = createContext<DayContext | null>( null )
@@ -84,6 +86,19 @@ export const DaysContextProvider = ({ text, labels, month, year, children }: Day
 
 		updateDay( task.date )
 	}
+	const handleMoveTask = ( date: Dayjs, task: Task ) => {
+		taskService.moveTask( date, task )
+
+		updateDay( task.date )
+		updateDay( date )
+	}
+
+	const handleChangeTaskPosition = ( task: Task, dragIndex: number, hoverIndex: number  ) => {
+		taskService.changeTaskPosition( task, dragIndex, hoverIndex )
+
+		updateDay( task.date )
+	}
+
 
 	return (
 		<DaysContext.Provider
@@ -91,6 +106,8 @@ export const DaysContextProvider = ({ text, labels, month, year, children }: Day
 				days,
 				handleAddOrEditTask,
 				handleDeleteTask,
+				handleMoveTask,
+				handleChangeTaskPosition,
 			}}
 		>
 			{ children }

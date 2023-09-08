@@ -5,6 +5,8 @@ import { Task } from "../../../../app/types/task.ts";
 import { CalendarItem } from "./CalendarItem.tsx";
 import { useDaysContext } from "../../providers/DaysProvider.tsx";
 import { DayTask } from "./DayTask.tsx";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const CalendarGrid = styled.div`
 	width: 100%;
@@ -41,9 +43,10 @@ export const Calendar = ( { handleCreateOrEditTask }: CalendarProps ) => {
 	}
 
 	const returnItemsForDay = ( tasks: Task[] ) => {
-		return tasks.map(( task ) => (
+		return tasks.map(( task, index ) => (
 			<DayTask
 				key={task.id}
+				index={index}
 				task={task}
 				onClick={( e ) => handleClick(e, task.date, task) }
 			/>
@@ -52,6 +55,7 @@ export const Calendar = ( { handleCreateOrEditTask }: CalendarProps ) => {
 
 	return (
 		<CalendarGrid>
+			<DndProvider backend={HTML5Backend}>
 			{ days.map(( item ) => (
 				<CalendarCard
 					key={item.date.format('DD.MM.YYYY')}
@@ -65,6 +69,7 @@ export const Calendar = ( { handleCreateOrEditTask }: CalendarProps ) => {
 					</CalendarItem>
 				</CalendarCard>
 			) ) }
+			</DndProvider>
 		</CalendarGrid>
 	)
 }
