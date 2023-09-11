@@ -6,5 +6,6 @@ export interface CalendarDay {
 	tasks: Task[],
 	holidays: { title: string, date: Dayjs } [],
 	isLastMonthDay: boolean,
-	isFirstMonthDay: boolean
+	isFirstMonthDay: boolean,
+	isInCurrentMonth: boolean,
 }

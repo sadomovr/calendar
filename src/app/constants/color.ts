@@ -7,9 +7,9 @@ export const color = {
 			primary: 'black'
 		},
 		background: {
-			success: 'rgba(163,239,144,0.3)',
-			error: 'rgba(239,144,144,0.3)',
-			primary: 'rgba(144,166,239,0.3)'
+			success: 'rgba(54,255,0,0.3)',
+			error: 'rgba(255,0,0,0.3)',
+			primary: 'rgba(0,68,255,0.3)'
 		}
 	},
 	label: {

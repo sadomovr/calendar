@@ -3,8 +3,12 @@ import { Dayjs } from "dayjs";
 import { ReactNode } from "react";
 import { useDrop } from "react-dnd";
 
-const CalendarItemHeader = styled.div`
-	font-weight: bold;
+const CalendarItemHeader = styled.span<{isInCurrentMonth: boolean}>`
+	font-weight: ${p => p.isInCurrentMonth ? 'bold' : undefined};
+`
+
+const CalendarItemNumberOfTasks = styled.span`
+	font-size: 14px;
 `
 
 const TasksContainer = styled.div<{ color: string }>`
@@ -21,9 +25,11 @@ type CalendarItemProps = {
 	date: Dayjs;
 	children: ReactNode,
 	dateHeaderFormat: string
+	numberOfTasks: number
+	isInCurrentMonth: boolean
 }
 
-export const CalendarItem = ( { children, date, dateHeaderFormat, }: CalendarItemProps ) => {
+export const CalendarItem = ( { children, date, dateHeaderFormat, numberOfTasks, isInCurrentMonth }: CalendarItemProps ) => {
 	const [{ isOver, canDrop }, drop] = useDrop({
 		accept: "Our first type",
 		drop: () => ({ name: date }),
@@ -48,21 +54,20 @@ export const CalendarItem = ( { children, date, dateHeaderFormat, }: CalendarIte
 		return ''
 	};
 
-
 	return (
-		<>
-			<div style={{ width: '100%', height: '100%' }}>
-				<CalendarItemHeader>
+		<div style={{ width: '100%', height: '100%' }}>
+			<div>
+				<CalendarItemHeader isInCurrentMonth={isInCurrentMonth}>
 					{ date.format(dateHeaderFormat) }
 				</CalendarItemHeader>
-				<TasksContainer
-					ref={drop}
-					color={getBackgroundColor()}
-				>
-					{ children }
-				</TasksContainer>
+				{ numberOfTasks > 0 ? <CalendarItemNumberOfTasks> {numberOfTasks } card </CalendarItemNumberOfTasks> : null }
 			</div>
-		</>
-
+			<TasksContainer
+				ref={drop}
+				color={getBackgroundColor()}
+			>
+				{ children }
+			</TasksContainer>
+		</div>
 	)
 }

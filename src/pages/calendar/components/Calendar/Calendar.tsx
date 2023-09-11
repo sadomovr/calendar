@@ -17,17 +17,30 @@ const CalendarGrid = styled.div`
 	margin-bottom: 20px;
 `
 
-const CalendarCard = styled.div`
-  background: #c0c0c0;
+const CalendarCard = styled.div<{color: string}>`
+  background: ${p => p.color};
   color: black;
   padding: 5px;
 	min-height: 120px;
 	min-width: 64px;
 `
 
+const CalendarHeader = styled.div`
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  width: 100%;
+  color: #747272;
+  margin-bottom: 15px;
+`
+
 type CalendarProps = {
 	handleCreateOrEditTask: ( date: Dayjs, task?: Task ) => void
 }
+
+const names = [
+	'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
+]
 
 export const Calendar = ( { handleCreateOrEditTask }: CalendarProps ) => {
 	const { days } = useDaysContext()
@@ -55,15 +68,19 @@ export const Calendar = ( { handleCreateOrEditTask }: CalendarProps ) => {
 
 	return (
 		<CalendarGrid>
+			{ names.map(name => <CalendarHeader key={name}>{name}</CalendarHeader>)}
 			<DndProvider backend={HTML5Backend}>
 			{ days.map(( item ) => (
 				<CalendarCard
 					key={item.date.format('DD.MM.YYYY')}
 					onClick={() => handleCreateOrEditTask( item.date )}
+					color={ item.isInCurrentMonth ? '#e2e6e9' : '#ebebeb' }
 				>
 					<CalendarItem
 						date={item.date}
 						dateHeaderFormat={ ( item.isFirstMonthDay || item.isLastMonthDay ) ? 'MMM DD' : 'DD' }
+						numberOfTasks={ item.tasks.length }
+						isInCurrentMonth={item.isInCurrentMonth}
 					>
 						{ returnItemsForDay( item.tasks )}
 					</CalendarItem>
