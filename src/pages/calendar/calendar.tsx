@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import { useCalendarFilter } from "./hooks";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Calendar, CalendarController, TaskModal } from "./components";
 import { LabelModal } from "./components/LabelsModal/LabelModal.tsx";
 import { useLabels } from "./components/LabelsModal/useLabels.tsx";
 import { DaysContextProvider } from "./providers/DaysProvider.tsx";
 import { NewTask, Task } from "../../app/types/task.ts";
+import { ImportExportController } from "./components/ImportExportController";
+import html2canvas from "html2canvas";
 
 const CalendarPageContainer = styled.div`
 	padding: 15px;
@@ -37,6 +39,7 @@ const defaultTaskModalState: TaskModalState = {
 }
 export const CalendarPage = ( ) => {
 	const filter = useCalendarFilter()
+	const contentRef = useRef(null)
 
 	const {
 		labels,
@@ -59,6 +62,25 @@ export const CalendarPage = ( ) => {
 			},
 		})
 	}
+
+	const handleDownloadImage = () => {
+		const content = contentRef.current;
+
+		if (!content) return;
+
+		html2canvas(content, { useCORS: true })
+			.then((canvas) => {
+				const dataUrl = canvas.toDataURL('image/png')
+				const link = document.createElement('a')
+
+				link.href = dataUrl
+				link.download = 'calendar.png'
+				link.click()
+			})
+			.catch((error) => {
+				console.error('Error converting HTML to image:', error);
+			});
+	};
 
 	const handleOpenLabelsModal = ( ) => {
 		setShowLabelsModal( true )
@@ -88,6 +110,8 @@ export const CalendarPage = ( ) => {
 				<Calendar
 					handleCreateOrEditTask={handleCreateOrEditTask}
 				/>
+
+				<ImportExportController handleDownload={handleDownloadImage} />
 
 				{ taskModal.isOpen ? (
 					<TaskModal

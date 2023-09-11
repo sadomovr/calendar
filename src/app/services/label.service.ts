@@ -23,15 +23,17 @@ export class LabelService {
 			labels[index] = label as Label
 		}
 
-		localStorage.setItem(
-			'labels',
-			JSON.stringify( labels )
-		)
+
+		this.saveAllLabels( labels )
 	}
 
 	public deleteLabel( id: string ) {
 		const labels = this.getLabels().filter(( item => item.id !== id ))
 
+		this.saveAllLabels( labels )
+	}
+
+	public saveAllLabels( labels: Label[] ) {
 		localStorage.setItem(
 			'labels',
 			JSON.stringify( labels )

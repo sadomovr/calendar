@@ -7,14 +7,14 @@ const CalendarItemHeader = styled.div`
 	font-weight: bold;
 `
 
-const TasksContainer = styled.div<{ backgroundColor: string }>`
+const TasksContainer = styled.div<{ color: string }>`
   display: flex;
   flex-direction: column;
   gap: 5px;
   height: 100%;
   width: 100%;
   padding: 15px 0;
-  background: ${p => p.backgroundColor};
+  background: ${p => p.color};
 `
 
 type CalendarItemProps = {
@@ -57,7 +57,7 @@ export const CalendarItem = ( { children, date, dateHeaderFormat, }: CalendarIte
 				</CalendarItemHeader>
 				<TasksContainer
 					ref={drop}
-					backgroundColor={getBackgroundColor()}
+					color={getBackgroundColor()}
 				>
 					{ children }
 				</TasksContainer>

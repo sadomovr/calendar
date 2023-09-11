@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import { Button } from "../../../../app/ui/Button";
 import Select, { MultiValue } from "react-select";
 import { Label } from "../../../../app/types/labels.ts";
-import { Input } from "../../../../app/ui/input/Input.tsx";
+import { Input } from "../../../../app/ui/input";
 
 const CalendarControllerContainer = styled.div`
 	display: flex;

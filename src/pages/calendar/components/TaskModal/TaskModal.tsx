@@ -6,7 +6,7 @@ import { Button } from "../../../../app/ui/Button";
 import { useDaysContext } from "../../providers/DaysProvider.tsx";
 import { Task } from "../../../../app/types/task.ts";
 import { Label } from "../../../../app/types/labels.ts";
-import { Input } from "../../../../app/ui/input/Input.tsx";
+import { Input } from "../../../../app/ui/input";
 
 type TaskModalProps = {
 	isOpen: boolean

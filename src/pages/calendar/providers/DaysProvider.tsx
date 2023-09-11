@@ -7,6 +7,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { holidaysService } from "../../../app/services/holidays.service.ts";
 import { MultiValue } from "react-select";
 import { Label } from "../../../app/types/labels.ts";
+import { labelService } from "../../../app/services/label.service.ts";
 
 type DayContext = {
 	days: CalendarDay[]
@@ -14,6 +15,7 @@ type DayContext = {
 	handleDeleteTask: ( task: Task ) => void
 	handleMoveTask: ( date: Dayjs, task: Task ) => void
 	handleChangeTaskPosition: ( task: Task, dragIndex: number, hoverIndex: number ) => void
+	handleImportData: ( tasks: { [key: string]: Task[] }, labels: Label[] ) => void
 }
 
 const DaysContext = createContext<DayContext | null>( null )
@@ -99,6 +101,16 @@ export const DaysContextProvider = ({ text, labels, month, year, children }: Day
 		updateDay( task.date )
 	}
 
+	const handleImportData = (
+		tasks: { [key: string]: Task[] },
+		labels: Label[]
+	) => {
+		taskService.saveAllTasks( tasks )
+		labelService.saveAllLabels( labels )
+
+		location.reload()
+	}
+
 
 	return (
 		<DaysContext.Provider
@@ -108,6 +120,7 @@ export const DaysContextProvider = ({ text, labels, month, year, children }: Day
 				handleDeleteTask,
 				handleMoveTask,
 				handleChangeTaskPosition,
+				handleImportData,
 			}}
 		>
 			{ children }

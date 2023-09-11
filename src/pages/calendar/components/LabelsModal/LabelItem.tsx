@@ -4,6 +4,7 @@ import { Label, NewLabel } from "../../../../app/types/labels.ts";
 import styled from "styled-components";
 import { color } from "../../../../app/constants/color.ts";
 import Select, { SingleValue } from "react-select";
+import { Input } from "../../../../app/ui/input";
 
 const LabelItemContainer = styled.div`
 	display: flex;
@@ -84,7 +85,7 @@ export const LabelItem = (
 					</>
 				) : (
 					<>
-						<input
+						<Input
 							id="name"
 							placeholder="Name"
 							value={editingLabel.value}

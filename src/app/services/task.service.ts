@@ -54,10 +54,7 @@ class TaskService {
 
 		tasks[ task.date.format(this.dateFormat)] = [ ...tasksByDate ]
 
-		localStorage.setItem(
-			'tasks',
-			JSON.stringify( { ...tasks, [ task.date.format(this.dateFormat) ]: [ ...tasksByDate ] } )
-		)
+		this.saveAllTasks( { ...tasks, [ task.date.format(this.dateFormat) ]: [ ...tasksByDate ] } )
 	}
 
 	public deleteTask( task: Task ) {
@@ -66,10 +63,7 @@ class TaskService {
 
 		tasks[ task.date.format(this.dateFormat)] = [ ...tasksByDate ]
 
-		localStorage.setItem(
-			'tasks',
-			JSON.stringify( tasks )
-		)
+		this.saveAllTasks( tasks )
 	}
 
 	public moveTask( date: Dayjs, task: Task ) {
@@ -78,21 +72,26 @@ class TaskService {
 	}
 
 	public changeTaskPosition(task: Task, dragIndex: number, hoverIndex: number ) {
-		const tasks = this.getTasksByDay( task.date )
+		const tasksByDay = this.getTasksByDay( task.date )
+		const tasks = this.getAllTasks()
 
-		const dragItem = tasks[dragIndex];
+
+		const dragItem = tasksByDay[dragIndex];
 
 		if (dragItem) {
-			const coppiedArray = [ ...tasks ]
+			const coppiedArray = [ ...tasksByDay ]
 
 			const prevItem = coppiedArray.splice(hoverIndex, 1, dragItem);
 			coppiedArray.splice(dragIndex, 1, prevItem[0]);
 
-			localStorage.setItem(
-				task.date.format( this.dateFormat ),
-				JSON.stringify( tasks )
-			)
+			tasks[ task.date.format(this.dateFormat)] = [ ...coppiedArray ]
+
+			this.saveAllTasks( tasks )
 		}
+	}
+
+	public saveAllTasks(tasks: { [key:string]: Task[] } ) {
+		localStorage.setItem('tasks', JSON.stringify( tasks ) )
 	}
 }
 
